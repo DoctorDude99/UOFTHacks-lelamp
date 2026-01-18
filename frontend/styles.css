@@ -69,7 +69,7 @@
 
       .content-wrapper {
         display: flex;
-        gap: 30px;
+        gap: 10px;
         justify-content: center;
         align-items: flex-start;
         flex-wrap: wrap;

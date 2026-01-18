@@ -22,10 +22,15 @@ def test_motors_service():
         print("Getting available recordings...")
         recordings = motors_service.get_available_recordings()
         print(f"Available recordings: {recordings}")
+        index = 0
+        for recording in recordings:
+            print(f"{index} : {recording}")
+            index += 1
         
         if recordings:
-            print(f"Playing first recording: {recordings[0]}")
-            motors_service.dispatch("play", recordings[0])
+            a = input("Please enter a number to play a recording!")
+            print(f"Playing first recording: {recordings[int(a)]}")
+            motors_service.dispatch("play", recordings[int(a)])
             
             # Wait for playback to complete
             motors_service.wait_until_idle(timeout=30)
