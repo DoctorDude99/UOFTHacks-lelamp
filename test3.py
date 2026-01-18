@@ -24,6 +24,10 @@ def habit_completed():
         rgb_service.dispatch("solid", (235, 96, 21))
         time.sleep(2)
 
+        print("Testing solid orange...")
+        rgb_service.dispatch("solid", (235, 96, 21))
+        time.sleep(2)
+
         print("Testing solid light blue...")
         rgb_service.dispatch("solid", (21, 231, 235))
         time.sleep(2)
