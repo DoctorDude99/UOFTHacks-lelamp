@@ -1,0 +1,105 @@
+{
+  "id": "focus_session",
+  "name": "Focus Session Setup",
+  "description": "A workflow that helps set up an optimal focus session based on user preferences and energy level",
+  "author": "team",
+  "createdAt": "2025-11-04T18:00:00Z",
+  "state_schema": {
+    "wants_music": { "type": "boolean", "default": false },
+    "energy_level": { "type": "string", "default": "medium" },
+    "task_type": { "type": "string", "default": "" },
+    "session_duration": { "type": "integer", "default": 25 }
+  },
+  "nodes": [
+    {
+      "id": "greet_and_ask_task",
+      "intent": "Greet the user warmly and ask what task or project they want to focus on today.",
+      "preferred_actions": []
+    },
+    {
+      "id": "ask_music_preference",
+      "intent": "Ask the user if they want background music or ambient sounds to help them focus.",
+      "preferred_actions": []
+    },
+    {
+      "id": "assess_energy_level",
+      "intent": "Ask the user how they're feeling - are they feeling energetic, medium, or tired? This helps determine the best focus approach.",
+      "preferred_actions": []
+    },
+    {
+      "id": "setup_high_energy",
+      "intent": "The user has high energy! Set an energetic, vibrant light color (bright yellow or orange) and suggest a challenging task or longer work session. Encourage them to tackle something difficult.",
+      "preferred_actions": ["set_rgb_solid"]
+    },
+    {
+      "id": "setup_medium_energy",
+      "intent": "The user has medium energy. Set a balanced, calming light color (soft blue or green) and suggest a moderate 25-30 minute focus session. Recommend starting with easier tasks.",
+      "preferred_actions": ["set_rgb_solid"]
+    },
+    {
+      "id": "setup_low_energy",
+      "intent": "The user has low energy. Set a warm, gentle light color (soft warm white or amber) and suggest a shorter 15-20 minute focus session. Recommend starting with simple, manageable tasks.",
+      "preferred_actions": ["set_rgb_solid"]
+    },
+    {
+      "id": "start_session",
+      "intent": "Start the focus session! Set a timer for the session duration, play an encouraging movement animation, and wish them good luck on their task.",
+      "preferred_actions": ["play_recording"]
+    }
+  ],
+  "edges": [
+    {
+      "id": "start",
+      "source": "START",
+      "target": "greet_and_ask_task",
+      "type": "normal"
+    },
+    {
+      "id": "e1",
+      "source": "greet_and_ask_task",
+      "target": "ask_music_preference",
+      "type": "normal"
+    },
+    {
+      "id": "e2",
+      "source": "ask_music_preference",
+      "target": "assess_energy_level",
+      "type": "normal"
+    },
+    {
+      "id": "e3",
+      "source": "assess_energy_level",
+      "target": {
+        "high": "setup_high_energy",
+        "medium": "setup_medium_energy",
+        "low": "setup_low_energy"
+      },
+      "state_key": "energy_level",
+      "type": "condition"
+    },
+    {
+      "id": "e4",
+      "source": "setup_high_energy",
+      "target": "start_session",
+      "type": "normal"
+    },
+    {
+      "id": "e5",
+      "source": "setup_medium_energy",
+      "target": "start_session",
+      "type": "normal"
+    },
+    {
+      "id": "e6",
+      "source": "setup_low_energy",
+      "target": "start_session",
+      "type": "normal"
+    },
+    {
+      "id": "e7",
+      "source": "start_session",
+      "target": "END",
+      "type": "normal"
+    }
+  ]
+}

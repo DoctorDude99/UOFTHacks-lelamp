@@ -1,0 +1,144 @@
+{
+  "id": "party_it_up",
+  "name": "Party It Up!",
+  "description": "Plan and start a party with themed music, decorations, and countdown. Perfect for birthdays, holidays, and celebrations!",
+  "author": "team",
+  "createdAt": "2025-12-02T00:00:00Z",
+  "triggers": ["voice_command", "alarm_trigger"],
+  "entry_points": {
+    "voice_command": "ask_party_theme",
+    "alarm_trigger": "announce_party_start"
+  },
+  "state_schema": {
+    "party_theme": { "type": "string", "default": "" },
+    "party_start_time": { "type": "string", "default": "" },
+    "playlist_selected": { "type": "boolean", "default": false },
+    "alarm_id": { "type": "integer", "default": null }
+  },
+  "nodes": [
+    {
+      "id": "ask_party_theme",
+      "intent": "Welcome! Ask the user what kind of party they're planning. Give them examples like: kids birthday party, New Year's Eve, Christmas party, Halloween bash, graduation celebration, wedding reception, casual hangout, etc. Listen to their response and save the theme to party_theme state.",
+      "preferred_actions": []
+    },
+    {
+      "id": "ask_party_time",
+      "intent": "Great! Now ask them when the party will start. Ask for a specific time like '7pm tonight' or '3pm tomorrow'. Make sure to get a clear time from them and save it to party_start_time state.",
+      "preferred_actions": []
+    },
+    {
+      "id": "set_party_alarm",
+      "intent": "Perfect! Create an alarm for the party start time using set_alarm. Use the label 'Party It Up - [theme]' where [theme] is the party theme. Tell them the alarm is set and you'll help get the party started when it's time. Save the alarm info and transition to party setup.",
+      "preferred_actions": ["set_alarm"]
+    },
+    {
+      "id": "party_setup_complete",
+      "intent": "The party alarm is all set! Tell them you're excited for the party and that you'll play awesome music and create a festive atmosphere when it's time. Do a fun preview RGB animation matching the party theme (colorful for birthday, red/green for Christmas, orange/purple for Halloween, gold for New Year, etc.).",
+      "preferred_actions": ["play_rgb_animation"]
+    },
+    {
+      "id": "announce_party_start",
+      "intent": "IT'S PARTY TIME! Make an exciting, enthusiastic announcement that the party is starting NOW! Be energetic and fun! Say something like 'Let's get this party started!' or 'Party time, everyone!' Play an exciting sound effect to kick things off. After announcing, immediately call complete_step() to move to the next step.",
+      "preferred_actions": ["play_sound_effect"]
+    },
+    {
+      "id": "choose_playlist",
+      "intent": "Time to get the music going! Call play_party_music with 'party' as the theme to start playing party music on Spotify. After the music starts, call complete_step() to continue.",
+      "preferred_actions": ["play_party_music"]
+    },
+    {
+      "id": "start_party_vibes",
+      "intent": "Music should be playing now! Play a colorful RGB animation like 'rainbow' or 'party' using play_rgb_animation. Set Spotify volume to 75% using spotify_volume. Tell everyone to have fun! Then call complete_step() to continue.",
+      "preferred_actions": ["play_rgb_animation", "spotify_volume"]
+    },
+    {
+      "id": "party_in_progress",
+      "intent": "The party is in full swing! Tell everyone they can ask you to change songs, adjust volume, or skip tracks anytime. You're here to keep the party going! Stay upbeat and festive. Then call complete_step() to finish.",
+      "preferred_actions": []
+    },
+    {
+      "id": "workflow_complete",
+      "intent": "Party mode is fully activated! The music is playing and the lights are going. Tell them to enjoy the party and that you're here if they need anything! Call complete_step() to end the workflow.",
+      "preferred_actions": []
+    }
+  ],
+  "edges": [
+    {
+      "id": "start_to_theme",
+      "source": "START",
+      "target": "ask_party_theme",
+      "type": "normal",
+      "comment": "User initiates workflow with voice command"
+    },
+    {
+      "id": "theme_to_time",
+      "source": "ask_party_theme",
+      "target": "ask_party_time",
+      "type": "normal",
+      "comment": "After getting theme, ask for party time"
+    },
+    {
+      "id": "time_to_alarm",
+      "source": "ask_party_time",
+      "target": "set_party_alarm",
+      "type": "normal",
+      "comment": "After getting time, set the party alarm"
+    },
+    {
+      "id": "alarm_to_setup",
+      "source": "set_party_alarm",
+      "target": "party_setup_complete",
+      "type": "normal",
+      "comment": "Confirm alarm is set"
+    },
+    {
+      "id": "setup_to_end",
+      "source": "party_setup_complete",
+      "target": "END",
+      "type": "normal",
+      "comment": "Workflow pauses until alarm triggers"
+    },
+    {
+      "id": "alarm_trigger_to_announce",
+      "source": "START",
+      "target": "announce_party_start",
+      "type": "normal",
+      "comment": "Alarm triggers, party begins!"
+    },
+    {
+      "id": "announce_to_playlist",
+      "source": "announce_party_start",
+      "target": "choose_playlist",
+      "type": "normal",
+      "comment": "After announcement, choose music"
+    },
+    {
+      "id": "playlist_to_vibes",
+      "source": "choose_playlist",
+      "target": "start_party_vibes",
+      "type": "normal",
+      "comment": "After playlist starts, create atmosphere"
+    },
+    {
+      "id": "vibes_to_progress",
+      "source": "start_party_vibes",
+      "target": "party_in_progress",
+      "type": "normal",
+      "comment": "Party atmosphere is set"
+    },
+    {
+      "id": "progress_to_complete",
+      "source": "party_in_progress",
+      "target": "workflow_complete",
+      "type": "normal",
+      "comment": "Party is fully active"
+    },
+    {
+      "id": "complete_to_end",
+      "source": "workflow_complete",
+      "target": "END",
+      "type": "normal",
+      "comment": "Workflow complete, party continues!"
+    }
+  ]
+}

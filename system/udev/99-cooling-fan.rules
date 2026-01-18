@@ -1,0 +1,8 @@
+# Allow lelamp user to control the RPi5 cooling fan
+# Applies to the cooling_fan hwmon device
+
+# Match the cooling fan hwmon device and set permissions
+SUBSYSTEM=="hwmon", ATTR{name}=="pwmfan", RUN+="/bin/chmod 666 /sys%p/pwm1 /sys%p/pwm1_enable"
+
+# Alternative match by device path
+SUBSYSTEM=="hwmon", DEVPATH=="*cooling_fan*", RUN+="/bin/chmod 666 /sys%p/pwm1 /sys%p/pwm1_enable"

@@ -1,0 +1,334 @@
+id: lelamp
+port: /dev/lelamp
+
+# Device Identity (populated automatically from hardware)
+device:
+  serial: null           # Read from /sys/firmware/devicetree/base/serial-number
+  pi_version: null       # Auto-detected: 4, 5, or 0 (Pi 4, Pi 5, or unknown)
+  memory_mb: null        # Auto-detected: Total RAM in MB
+  registered: false      # True after registering with Hub
+  user_linked: false     # True after linking to user account
+  hub_url: null          # Hub server URL after registration
+
+# Data Collection / Telemetry
+datacollection:
+  enabled: false                    # Enable telemetry collection
+  hub_url: http://192.168.10.10:8000  # Hub server URL
+  upload_interval_seconds: 300      # Upload every 5 minutes
+  collection_interval_seconds: 60   # Collect metrics every minute
+  audio_collection: false           # Collect audio recordings (requires consent)
+  video_collection: false           # Collect video/images (requires consent)
+  user_consent: false               # User has consented to data collection
+
+# WiFi Configuration
+wifi:
+  enabled: true           # Enable WiFi setup in wizard
+  configured: false       # Set to true after WiFi is configured
+  ap_mode: false          # True when running in AP mode
+  ssid: null              # Connected SSID (when configured)
+
+# Authentication (Clerk)
+# Note: CLERK_SECRET_KEY should be set in ~/.lelamp/.env (not here)
+auth:
+  enabled: true           # Enable Clerk authentication
+  local_bypass: false     # Require Clerk authentication even on local network
+  clerk_publishable_key: pk_test_ZXhhY3QtcGVnYXN1cy00Ni5jbGVyay5hY2NvdW50cy5kZXYk
+
+agent:
+  enabled: false
+# Voice Pipeline Configuration
+# type: "livekit" (OpenAI Realtime via LiveKit) or "local" (Faster Whisper + Ollama + Piper)
+pipeline:
+  type: livekit  # Change to "local" for local AI
+  local:
+    # STT - Faster Whisper
+    whisper_model: tiny           # tiny, base, small
+    whisper_compute: int8         # int8 or float32
+    # LLM - Ollama
+    ollama_url: http://localhost:11434
+    ollama_model: llama3.2:3b     # Or any Ollama model
+    history_length: 10            # Chat history messages to keep
+    # TTS - Piper
+    piper_path: piper/piper
+    voices_dir: piper/voices
+    voice: ryan-medium.onnx       # Voice model file
+    # Audio settings
+    mute_mic_during_playback: true
+    silence_threshold: 0.01       # RMS threshold for silence detection
+    silence_duration: 0.5         # Seconds of silence before transcription
+    min_audio_length: 0.3         # Minimum audio length to transcribe
+setup:
+  first_boot: true
+  setup_complete: false
+  current_step: null
+  steps_completed:
+    audio: false
+    camera: false
+    rgb: false
+    motor_controller: false
+    motor_voltage: false
+    motor_ids: false
+    environment: false
+    personality: false
+    motor_calibration: false
+  audio:
+    type: ''
+    tested: false
+  camera:
+    enabled: false
+    tested: false
+  rgb:
+    tested: false
+  motor_controller:
+    udev_configured: false
+    port_detected: ''
+  motor_ids_configured: []
+motors:
+  enabled: true
+  voltage: 12
+  port: /dev/lelamp
+  lamp_id: lelamp
+  auto_disable_on_error: true
+mute_mic_while_speaking: true
+mic_ready_sound: assets/AudioFX/Effects/Scifi-Success.mp3
+volume: 50
+microphone_volume: 50
+language: en
+personality:
+  character_file: lelamp/personality/characters/lelamp.json
+  instructions_file: lelamp/personality/instructions.txt
+location:
+  city: Toronto
+  region: Ontario
+  country: Canada
+  timezone: America/Toronto
+  lat: 43.6532
+  lon: -79.3832
+vad:
+  activation_threshold: 0.45
+  music_threshold: 0.8
+  min_silence_duration: 0.5
+  min_speech_duration: 0.15
+microphone:
+  vad_mode: local                    # local or server
+  gate_release_time: 1.5             # Seconds to keep gate open after speech
+  barge_in_threshold: 0.45           # Threshold for interrupting AI speech
+  echo_gate_threshold: 0.03          # Threshold for echo cancellation gate
+  local_vad_threshold: 0.65          # Local VAD sensitivity
+  server_vad_threshold: 0.75         # Server VAD sensitivity
+  server_silence_duration_ms: 600    # Silence duration for server VAD
+  debug_logging: false               # Enable microphone debug logs
+  audio_routing_enabled: false       # Enable audio routing features
+  debug_transcription: false         # Log transcription debug info
+  filter_garbage_transcription: true # Filter out noise/garbage transcriptions
+endpointing:
+  min_delay: 0.8
+  max_delay: 6.0
+  min_consecutive_speech_delay: 0.5
+motor_preset: Normal
+motor_presets:
+  Gentle:
+    default:
+      p_coefficient: 8
+      i_coefficient: 0
+      d_coefficient: 10
+      torque_limit: 250
+    base_yaw:
+      p_coefficient: 8
+      d_coefficient: 12
+      torque_limit: 300
+    base_pitch:
+      p_coefficient: 10
+      d_coefficient: 16
+      torque_limit: 350
+    elbow_pitch:
+      p_coefficient: 8
+      d_coefficient: 10
+      torque_limit: 280
+    wrist_roll:
+      p_coefficient: 6
+      d_coefficient: 8
+      torque_limit: 120
+    wrist_pitch:
+      p_coefficient: 6
+      d_coefficient: 8
+      torque_limit: 120
+  Normal:
+    default:
+      p_coefficient: 16
+      i_coefficient: 0
+      d_coefficient: 32
+      torque_limit: 500
+    base_yaw:
+      p_coefficient: 14
+      d_coefficient: 28
+      torque_limit: 450
+    base_pitch:
+      p_coefficient: 18
+      d_coefficient: 35
+      torque_limit: 550
+    elbow_pitch:
+      p_coefficient: 16
+      d_coefficient: 32
+      torque_limit: 500
+    wrist_roll:
+      p_coefficient: 12
+      d_coefficient: 24
+      torque_limit: 350
+    wrist_pitch:
+      p_coefficient: 12
+      d_coefficient: 24
+      torque_limit: 350
+  Sport:
+    default:
+      p_coefficient: 32
+      i_coefficient: 0
+      d_coefficient: 64
+      torque_limit: 1000
+    base_yaw:
+      p_coefficient: 28
+      d_coefficient: 56
+      torque_limit: 900
+    base_pitch:
+      p_coefficient: 35
+      d_coefficient: 70
+      torque_limit: 1000
+    elbow_pitch:
+      p_coefficient: 32
+      d_coefficient: 64
+      torque_limit: 1000
+    wrist_roll:
+      p_coefficient: 24
+      d_coefficient: 48
+      torque_limit: 700
+    wrist_pitch:
+      p_coefficient: 24
+      d_coefficient: 48
+      torque_limit: 700
+pushable_mode:
+  preset: Gentle
+  current_threshold: 100
+  position_threshold: 5
+  hold_delay: 0.3
+  poll_rate: 30
+  return_to_idle: true
+face_tracking:
+  enabled: false
+  engine: opencv
+  camera_index: /dev/usbcam
+  resolution:
+  - 320
+  - 240
+  fps: 10
+  motion:
+    scale: 0.28
+    max_speed: 4.0
+    dead_zone: 4.0
+    smoothing: 0.6
+  mediapipe:
+    min_detection_confidence: 0.7
+    min_tracking_confidence: 0.7
+vision:
+  enabled: false
+  # Camera configuration
+  camera_type: auto        # auto, innomaker, innomaker_dn, centerm, generic
+  camera_device: null      # null for auto-detect, or /dev/usbcam_inno, etc.
+  resolution: [640, 480]   # Default resolution (driver may override)
+  fps: 30                  # Target FPS
+  # LiveKit publishing
+  publish_livekit_video: false
+  publish_livekit_image: false
+  provider: gemini
+  image_fps: 1.0
+  max_frame_size: 512
+  instructions: 'You can see through a camera. When asked "what do you see?" or similar
+    questions,
+
+    describe what you observe. Be concise. Don''t mention vision unless specifically
+    asked.
+
+    '
+  ollama:
+    enabled: true
+    url: http://192.168.10.60:11434
+    model: llava:7b
+    analysis_interval: 5.0
+    inject_system_prompt: true
+    proactive_comments: true
+    instructions_file: lelamp/service/vision/vision_instructions.txt
+webui:
+  enabled: true
+  port: 80
+spotify:
+  enabled: true
+  redirect_uri: https://halox.local:8888/api/v1/spotify/auth/callback
+  device_name: HaloX
+modifiers:
+  music:
+    enabled: false
+    amplitude: 12.0
+    beat_divisor: 1.0
+    groove: 0.3
+    wave_spread: 0.08
+    energy_threshold: 0.25
+    dance_threshold: 0.25
+    excited_threshold: 0.6
+    joint: wrist_pitch.pos
+  breathing:
+    enabled: false
+    amplitude: 2.0
+    frequency: 0.2
+  twitch:
+    enabled: false
+    amplitude: 3.0
+    min_interval: 3.0
+    max_interval: 10.0
+  sway:
+    enabled: false
+    amplitude: 8.0
+    frequency: 0.15
+rgb:
+  enabled: true
+  led_count: 93
+  led_pin: 10
+  led_freq_hz: 800000
+  fps: 1
+  led_dma: 10
+  led_brightness: 25
+  led_invert: false
+  led_channel: 0
+  default_animation: ripple
+  default_color:
+  - 0
+  - 0
+  - 150
+  idle_timeout_seconds: 30
+  # Driver selection (auto-detected from Pi version if null)
+  # Options: null (auto), "lgpio", "rpi4", "rpi5", "spi", "simulator"
+  # Pi 5 with pin 10: lgpio is preferred (no kernel module needed)
+  force_driver: null
+  rings:
+  - name: ring_6
+    start: 0
+    end: 31
+    count: 32
+  - name: ring_5
+    start: 32
+    end: 55
+    count: 24
+  - name: ring_4
+    start: 56
+    end: 71
+    count: 16
+  - name: ring_3
+    start: 72
+    end: 83
+    count: 12
+  - name: ring_2
+    start: 84
+    end: 91
+    count: 8
+  - name: ring_1
+    start: 92
+    end: 92
+    count: 1

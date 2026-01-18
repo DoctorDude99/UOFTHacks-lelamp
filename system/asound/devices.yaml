@@ -1,0 +1,97 @@
+# Available audio devices for LeLamp
+# This file defines all supported audio hardware configurations
+
+playback_devices:
+  usb_c_speaker:
+    name: "USB-C Speaker"
+    card: "Device"
+    device: 0
+    channels: 2
+    rate: 48000
+    description: "USB-C Audio Speaker/DAC"
+
+
+  halox:
+    name: "UACDemoV10"
+    card: "UACDemoV10"
+    device: 0
+    channels: 2
+    rate: 48000
+    description: "UACDemoV10 USB Audio Device"
+
+  waveshare:
+    name: "Waveshare USB Audio"
+    card: "Device"
+    device: 0
+    channels: 2
+    rate: 48000
+    description: "Waveshare USB PnP Audio Device"
+
+  seeed2mic:
+    name: "ReSpeaker 2-Mic v2"
+    card: "seeed2micvoicec"
+    device: 0
+    channels: 2
+    rate: 48000
+    description: "Seeed 2-Mic HAT (ReSpeaker v2.x)"
+
+  headphones:
+    name: "Headphones"
+    card: "Headphones"
+    device: 0
+    channels: 2
+    rate: 48000
+    description: "3.5mm headphone jack"
+
+  usb_pnp_audio:
+    name: "USB PnP Audio Device"
+    card: "Device_1"
+    device: 0
+    channels: 2
+    rate: 48000
+    description: "USB PnP Audio Device (Solid State System)"
+
+capture_devices:
+  innomaker_camera:
+    name: "Innomaker USB Camera"
+    card: "InnomakerU20CAM"
+    device: 0
+    channels: 2
+    rate: 24000
+    description: "Innomaker USB 2.0 Camera with Built-In Microphone"
+    dsnoop: true
+
+  none:
+    name: "None (No microphone)"
+    card: "null"
+    device: 0
+    channels: 2
+    rate: 48000
+    description: "Skip microphone configuration"
+
+  camera:
+    name: "Centerm Camera"
+    card: "Camera"
+    device: 0
+    channels: 2
+    rate: 48000
+    description: "USB Camera Microphone"
+    dsnoop: true  # Enable mic sharing for sleep mode wake detection
+
+  usb_pnp:
+    name: "USB PnP Sound Device"
+    card: "Device"
+    device: 0
+    channels: 2
+    rate: 48000
+    description: "USB PnP Sound Device (generic USB mic)"
+    dsnoop: true  # Enable mic sharing for sleep mode wake detection
+
+  seeed2mic:
+    name: "ReSpeaker 2-Mic v2"
+    card: "seeed2micvoicec"
+    device: 0
+    channels: 2
+    rate: 48000
+    description: "Seeed 2-Mic HAT (ReSpeaker v2.x)"
+    dsnoop: true  # Enable mic sharing for sleep mode wake detection

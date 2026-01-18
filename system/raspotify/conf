@@ -1,0 +1,27 @@
+# Raspotify configuration for LeLamp
+# This file is copied to /etc/raspotify/conf during installation
+
+# Device name shown in Spotify Connect
+LIBRESPOT_NAME="lelamp"
+
+# Use lelamp_playback abstract device (hardware independent)
+# Allows sharing with LiveKit via dmix + automatic sample rate conversion
+LIBRESPOT_DEVICE="lelamp_playback"
+
+# Bitrate: 96, 160, or 320 kbps
+LIBRESPOT_BITRATE="320"
+
+# Initial volume (0-100)
+LIBRESPOT_INITIAL_VOLUME="80"
+
+# Volume control: linear, log, fixed
+LIBRESPOT_VOLUME_CTRL="log"
+
+# Autoplay similar tracks when queue ends
+LIBRESPOT_AUTOPLAY="on"
+
+# Backend: alsa, pulseaudio, pipe
+LIBRESPOT_BACKEND="alsa"
+
+# Additional options (if needed)
+# LIBRESPOT_OPTS=""

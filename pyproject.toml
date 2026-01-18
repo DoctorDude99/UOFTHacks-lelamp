@@ -1,0 +1,62 @@
+[project]
+name = "lelamp-runtime"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "feetech-servo-sdk>=1.0.0",
+    "lerobot>=0.3.3",
+    "numpy>=2.2.6",
+    "pyarrow==20.0.0",
+    "pyaudio>=0.2.14",
+    "python-dotenv",
+    "pyyaml>=6.0.0",
+    "sounddevice>=0.5.2",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "websockets>=12.0",
+    "aiohttp>=3.9.0",
+    "pytz>=2024.1",
+    "feedparser>=6.0.0",
+    "openai-whisper>=20231117",
+    "spotipy>=2.23.0",
+    "netifaces>=0.11.0",
+    "timezonefinder>=6.5.0",
+    # Authentication
+    "PyJWT>=2.8.0",
+    "httpx>=0.27.0",
+    # Local voice pipeline dependencies
+    "faster-whisper>=1.0.0",
+    "soxr>=0.3.0",
+    # opencv-python-headless at end + override-dependencies ensures headless is used
+    "opencv-python-headless>=4.11.0.86",
+    "torchaudio>=2.7.1",
+    "rpi-ws281x>=5.0.0",
+    "lgpio>=0.2.2.0",
+    "adafruit-circuitpython-neopixel>=6.3.18",
+    "adafruit-blinka>=8.68.1",
+    "adafruit-blinka-raspberry-pi5-neopixel>=1.0.0rc2",  # Pi5 NeoPixel support
+    "cryptography==44.0.0",
+    "rpi-lgpio>=0.6",
+    "deepgram-sdk>=5.3.1",
+    "groq>=1.0.0",
+    "scipy>=1.17.0",
+    "soundfile>=0.13.1",
+    "librosa>=0.11.0",
+    "mediapipe==0.10.14",
+]
+
+[tool.uv.sources]
+lerobot = { git = "https://github.com/huggingface/lerobot" }
+
+[tool.uv]
+# Force headless opencv - prevents lerobot from pulling in the GUI version
+override-dependencies = [
+    "opencv-python>=4.11.0.86 ; sys_platform == 'never'",
+]
+
+[project.optional-dependencies]
+hardware = [
+    "rpi-ws281x",
+]

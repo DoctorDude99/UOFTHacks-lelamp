@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+@theme {
+  /* LeLamp Brand Colors */
+  --color-brand-orange: #f47a2e;
+  --color-brand-gold: #ffa002;
+  --color-brand-cream: #f0ede1;
+  --color-brand-light: #eaeaea;
+
+  /* Base dark theme (default) - using brand orange as primary */
+  --color-primary: #f47a2e;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #ffa002;
+  --color-secondary-foreground: #1a1a1a;
+
+  --color-accent: #ffa002;
+  --color-accent-foreground: #1a1a1a;
+
+  /* Highlight colors using brand orange/gold */
+  --color-highlight: #f47a2e;
+  --color-highlight-foreground: #ffffff;
+  --color-highlight-gold: #ffa002;
+
+  --color-destructive: #b31d1d;
+  --color-destructive-foreground: #ffffff;
+
+  --color-background: oklch(0.12 0.02 250);
+  --color-foreground: oklch(0.95 0 0);
+
+  --color-card: oklch(0.16 0.02 250);
+  --color-card-foreground: oklch(0.95 0 0);
+
+  --color-muted: oklch(0.25 0.02 250);
+  --color-muted-foreground: oklch(0.65 0 0);
+
+  /* Brand orange tinted borders */
+  --color-border: #3d2a1f;
+  --color-input: oklch(0.2 0.02 250);
+  --color-ring: #f47a2e;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+/* Light theme overrides */
+.light {
+  --color-primary: #f47a2e;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #ffa002;
+  --color-secondary-foreground: #1a1a1a;
+
+  --color-accent: #ffa002;
+  --color-accent-foreground: #1a1a1a;
+
+  --color-destructive: #b31d1d;
+  --color-destructive-foreground: #ffffff;
+
+  /* LeLamp brand cream/off-white background */
+  --color-background: #f0ede1;
+  --color-foreground: #1a1a1a;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #1a1a1a;
+
+  --color-muted: #e8e4d9;
+  --color-muted-foreground: #666666;
+
+  /* Warm orange-tinted border for light mode */
+  --color-border: #e0c4a8;
+  --color-input: #ffffff;
+  --color-ring: #f47a2e;
+}
+
+/* Dark theme explicit class (for when explicitly set) */
+.dark {
+  --color-primary: #f47a2e;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #ffa002;
+  --color-secondary-foreground: #1a1a1a;
+
+  --color-accent: #ffa002;
+  --color-accent-foreground: #1a1a1a;
+
+  --color-destructive: #b31d1d;
+  --color-destructive-foreground: #ffffff;
+
+  --color-background: oklch(0.12 0.02 250);
+  --color-foreground: oklch(0.95 0 0);
+
+  --color-card: oklch(0.16 0.02 250);
+  --color-card-foreground: oklch(0.95 0 0);
+
+  --color-muted: oklch(0.25 0.02 250);
+  --color-muted-foreground: oklch(0.65 0 0);
+
+  /* Brand orange tinted borders */
+  --color-border: #3d2a1f;
+  --color-input: oklch(0.2 0.02 250);
+  --color-ring: #f47a2e;
+}
+
+/* Base styles */
+* {
+  @apply border-border;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Custom scrollbar - adapts to theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #f47a2e;
+  @apply rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #ffa002;
+}
+
+/* Highlight utility classes for brand accent colors */
+.text-highlight {
+  color: var(--color-highlight);
+}
+
+.bg-highlight {
+  background-color: var(--color-highlight);
+}
+
+.text-highlight-gold {
+  color: var(--color-highlight-gold);
+}
+
+.bg-highlight-gold {
+  background-color: var(--color-highlight-gold);
+}
+
+.border-highlight {
+  border-color: var(--color-highlight);
+}
+
+/* Gradient using brand colors */
+.bg-brand-gradient {
+  background: linear-gradient(135deg, var(--color-highlight) 0%, var(--color-highlight-gold) 100%);
+}
+
+/* Card hover effect with brand color */
+.card-brand-hover:hover {
+  border-color: #f47a2e;
+  box-shadow: 0 0 0 1px #f47a2e;
+}

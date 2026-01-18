@@ -1,0 +1,53 @@
+# USB Camera udev rules for LeLamp
+# Place this file in /etc/udev/rules.d/
+# Apply with: sudo udevadm control --reload-rules && sudo udevadm trigger
+
+# =============================================================================
+# Camera Devices
+# =============================================================================
+# Note: ATTR{index}=="0" ensures we link to the video CAPTURE device,
+# not the metadata device (index==1) that some cameras expose.
+
+# Innomaker U20CAM-1080p-S1 (video only, no mic)
+# Vendor: Sonix Technology (0c45), Product: 6366
+SUBSYSTEM=="video4linux", ATTR{index}=="0", ATTRS{idVendor}=="0c45", ATTRS{idProduct}=="6366", \
+    MODE="0660", GROUP="video", \
+    SYMLINK+="usbcam_inno", \
+    TAG+="uaccess"
+
+# Innomaker U20CAM-1080PD&N-S1 (Day/Night with mic)
+# Vendor: Realtek (0bda), Product: 5856
+SUBSYSTEM=="video4linux", ATTR{index}=="0", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="5856", \
+    MODE="0660", GROUP="video", \
+    SYMLINK+="usbcam_inno_dn", \
+    TAG+="uaccess"
+
+# Centerm Camera (Alcor Micro) with mic
+# Vendor: Alcor Micro (2b46), Product: bd01
+SUBSYSTEM=="video4linux", ATTR{index}=="0", ATTRS{idVendor}=="2b46", ATTRS{idProduct}=="bd01", \
+    MODE="0660", GROUP="video", \
+    SYMLINK+="usbcam_centerm", \
+    TAG+="uaccess"
+
+# =============================================================================
+# Audio Devices (for cameras with built-in mics)
+# =============================================================================
+
+# Audio for Innomaker Day/Night
+SUBSYSTEM=="sound", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="5856", \
+    MODE="0660", GROUP="audio", \
+    TAG+="uaccess"
+
+# Audio for Centerm Camera
+SUBSYSTEM=="sound", ATTRS{idVendor}=="2b46", ATTRS{idProduct}=="bd01", \
+    MODE="0660", GROUP="audio", \
+    TAG+="uaccess"
+
+# =============================================================================
+# Generic fallback - also create /dev/usbcam symlink to first camera found
+# =============================================================================
+
+# Keep legacy /dev/usbcam for backwards compatibility (points to innomaker_dn if present)
+# ATTR{index}=="0" ensures it points to the capture device, not metadata device
+SUBSYSTEM=="video4linux", ATTR{index}=="0", ATTRS{idVendor}=="0bda", ATTRS{idProduct}=="5856", \
+    SYMLINK+="usbcam"

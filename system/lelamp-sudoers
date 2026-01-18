@@ -1,0 +1,37 @@
+# LeLamp Sudoers Configuration
+# This file grants passwordless sudo access for LeLamp service operations
+#
+# Installation:
+#   sudo cp system/lelamp-sudoers /etc/sudoers.d/lelamp
+#   sudo chmod 440 /etc/sudoers.d/lelamp
+#
+# Note: Replace 'lelamp' with the actual username running the LeLamp service
+
+# Allow shutdown command (used by sleep/shutdown functions)
+# Restricted to immediate shutdown only
+lelamp ALL=(ALL) NOPASSWD: /sbin/shutdown now
+lelamp ALL=(ALL) NOPASSWD: /sbin/shutdown -h now
+
+# Allow systemctl commands for lelamp service management
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl start lelamp.service
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl stop lelamp.service
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl restart lelamp.service
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl status lelamp.service
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl enable lelamp.service
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl disable lelamp.service
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl daemon-reload
+
+# Allow systemctl commands for raspotify service (Spotify integration)
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl start raspotify
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl stop raspotify
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl restart raspotify
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl status raspotify
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl enable raspotify
+lelamp ALL=(ALL) NOPASSWD: /bin/systemctl disable raspotify
+
+# Allow editing raspotify configuration via safe wrapper script
+# The wrapper script validates input and prevents arbitrary sed commands
+lelamp ALL=(ALL) NOPASSWD: /usr/local/bin/update-raspotify-name.sh *
+
+# Allow timedatectl for timezone management (used by WebUI location setup)
+lelamp ALL=(ALL) NOPASSWD: /bin/timedatectl set-timezone *

@@ -1,0 +1,151 @@
+{
+  "id": "bedside_alarm",
+  "name": "Bedside Alarm Clock",
+  "description": "A smart alarm clock workflow that handles wake-up routines, snooze functionality, and provides weather/news updates",
+  "author": "team",
+  "createdAt": "2025-11-27T00:00:00Z",
+  "triggers": ["voice_command", "alarm_trigger"],
+  "entry_points": {
+    "voice_command": "set_alarm",
+    "alarm_trigger": "check_if_sleeping"
+  },
+  "progression_triggers": [
+    {
+      "type": "keyword",
+      "keywords": ["i'm up", "i'm awake", "getting up", "i'm getting out of bed", "okay i'm up", "yes", "awake", "up"],
+      "description": "Trigger when user confirms they're awake",
+      "action": "update_state",
+      "state_updates": {
+        "user_awake": true
+      }
+    },
+    {
+      "type": "keyword",
+      "keywords": ["snooze", "5 more minutes", "let me sleep", "not yet", "still sleeping", "need more time"],
+      "description": "Trigger when user wants to snooze",
+      "action": "update_state",
+      "state_updates": {
+        "wants_snooze": true
+      }
+    }
+  ],
+  "state_schema": {
+    "user_awake": { "type": "boolean", "default": false },
+    "wants_snooze": { "type": "boolean", "default": false },
+    "snooze_count": { "type": "integer", "default": 0 }
+  },
+  "nodes": [
+    {
+      "id": "set_alarm",
+      "intent": "The user wants to set a bedside alarm. Ask them what time they want to wake up (e.g., '7:30am tomorrow'). Once they tell you, use set_alarm to create the alarm with label 'bedside alarm'. Tell them the alarm is set and when it will go off. This workflow will automatically continue when the alarm triggers.",
+      "preferred_actions": ["set_alarm"]
+    },
+    {
+      "id": "check_if_sleeping",
+      "intent": "The alarm just went off! Ask the user if they're awake or still sleeping. Listen carefully to their response. If they say they're awake, up, or getting up, set user_awake to true. If they say they're still sleeping or don't respond clearly, set user_awake to false.",
+      "preferred_actions": []
+    },
+    {
+      "id": "tell_wake_up",
+      "intent": "The user is still sleeping! Tell them it's time to wake up in a friendly but insistent way. Then ask if they want to snooze for a few more minutes or if they're ready to get up. Listen for their response - if they ask for snooze, set wants_snooze to true.",
+      "preferred_actions": []
+    },
+    {
+      "id": "set_snooze",
+      "intent": "The user wants to snooze! Ask them how long they want to snooze (default to 5 minutes if they don't specify). Set a timer with label 'bedside_alarm_snooze' that will re-trigger this workflow when it completes. Tell them you'll wake them up after the snooze time. Increment snooze_count.",
+      "preferred_actions": ["set_timer"]
+    },
+    {
+      "id": "weather_and_news",
+      "intent": "Great, they're awake! Tell them good morning and provide today's weather forecast and top news headlines for their city. Be helpful and informative to start their day right.",
+      "preferred_actions": ["get_weather", "get_news"]
+    },
+    {
+      "id": "confirm_awake",
+      "intent": "Ask the user to confirm they are actually getting out of bed now (not just saying they're awake but still lying down!). If they confirm they're up, set user_awake to true. If they admit they're still in bed or want more time, set wants_snooze to true.",
+      "preferred_actions": []
+    },
+    {
+      "id": "workflow_complete",
+      "intent": "Excellent! The user is up and ready to start their day! Say something encouraging like 'Have a great day!' and do a celebratory RGB animation with bright, energetic colors.",
+      "preferred_actions": ["play_rgb_animation"]
+    }
+  ],
+  "edges": [
+    {
+      "id": "start_voice",
+      "source": "START",
+      "target": "set_alarm",
+      "type": "normal",
+      "comment": "User initiates workflow by asking to set an alarm"
+    },
+    {
+      "id": "alarm_set_end",
+      "source": "set_alarm",
+      "target": "END",
+      "type": "normal",
+      "comment": "After setting alarm, workflow pauses until alarm triggers"
+    },
+    {
+      "id": "alarm_trigger_start",
+      "source": "START",
+      "target": "check_if_sleeping",
+      "type": "normal",
+      "comment": "When alarm triggers, start by checking if user is awake"
+    },
+    {
+      "id": "check_result",
+      "source": "check_if_sleeping",
+      "target": {
+        "true": "weather_and_news",
+        "false": "tell_wake_up"
+      },
+      "state_key": "user_awake",
+      "type": "condition",
+      "comment": "If awake -> weather/news, if sleeping -> tell them to wake up"
+    },
+    {
+      "id": "wake_up_result",
+      "source": "tell_wake_up",
+      "target": {
+        "true": "set_snooze",
+        "false": "weather_and_news"
+      },
+      "state_key": "wants_snooze",
+      "type": "condition",
+      "comment": "If wants snooze -> set snooze timer, otherwise -> give weather/news"
+    },
+    {
+      "id": "snooze_end",
+      "source": "set_snooze",
+      "target": "END",
+      "type": "normal",
+      "comment": "After setting snooze, workflow ends and waits for timer to re-trigger"
+    },
+    {
+      "id": "weather_to_confirm",
+      "source": "weather_and_news",
+      "target": "confirm_awake",
+      "type": "normal",
+      "comment": "After weather/news, confirm they're actually getting up"
+    },
+    {
+      "id": "confirm_result",
+      "source": "confirm_awake",
+      "target": {
+        "true": "workflow_complete",
+        "false": "set_snooze"
+      },
+      "state_key": "user_awake",
+      "type": "condition",
+      "comment": "If confirmed up -> complete, if still in bed -> snooze"
+    },
+    {
+      "id": "complete_end",
+      "source": "workflow_complete",
+      "target": "END",
+      "type": "normal",
+      "comment": "Workflow successfully completed"
+    }
+  ]
+}

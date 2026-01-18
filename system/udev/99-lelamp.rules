@@ -1,0 +1,6 @@
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d3", ATTRS{serial}=="5A7C117065", MODE="0660", GROUP="dialout", SYMLINK+="lelamp"
+
+# Pi 5 SPI compatibility - create spidev0.0 symlink for Adafruit libraries
+# Pi 5 uses spidev10.0, but Adafruit Blinka expects spidev0.0
+KERNEL=="spidev10.0", SUBSYSTEM=="spidev", SYMLINK+="spidev0.0"
+
