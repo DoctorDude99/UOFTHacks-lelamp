@@ -13,13 +13,29 @@ def frequency_reached_animation():
     parser.add_argument('--port', type=str, required=True, help='Serial port for the lamp')
     args = parser.parse_args()
 
-    motors_service = MotorsService("/dev/ttyACM0")
+    motors_service = MotorsService(port=args.port)
+    # port=args.port
+    # "/dev/ttyACM0"
     motors_service.start()
     try:
-        print("Getting available recordings...")
-        recordings = motors_service.get_available_recordings()
-        print(f"Playing first recording: {recordings[int(4)]}")
-        motors_service.dispatch("play", recordings[int(4)])
+
+        if recordings:
+            print(f"Available recordings: {recordings}")
+            index = 0
+            for recording in recordings:
+                print(f"{index} : {recording}")
+                index += 1
+            print("Getting available recordings...")
+            recordings = motors_service.get_available_recordings()
+            print(f"Playing first recording: {recordings[4]}")
+            motors_service.dispatch("play", recordings[4])
+            
+            # Wait for playback to complete
+            motors_service.wait_until_idle(timeout=5)
+            print("Playback completed!")
+        else:
+            print("No recordings found. Create some recordings first.")
+       
         
         # Wait for playback to complete
         motors_service.wait_until_idle(timeout=5)
