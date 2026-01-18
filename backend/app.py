@@ -1,19 +1,39 @@
-from ultralytics import YOLO
-import cv2
-import math 
-import time
-
+# imports
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import threading
+import anims
 
+from ultralytics import YOLO
+import cv2
+import math
+import time
+
+# ---- FLASK SETUP ----
+app = Flask(__name__)
+CORS(app)
+
+#global TARGET_CLASS_ID
+
+@app.route("/api/habits", methods=["POST"]) 
+def receive_data(): 
+    global TARGET_CLASS_ID 
+    data = request.json 
+    TARGET_CLASS_ID = data.get("target", TARGET_CLASS_ID) 
+    print("New target class:", TARGET_CLASS_ID) 
+    return jsonify({ "status": "received", "target": TARGET_CLASS_ID })
+
+def run_flask():
+    app.run(host="0.0.0.0", port=5000, debug=False)
+
+threading.Thread(target=run_flask, daemon=True).start()
 # start webcam
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
 cap.set(4, 480)
 
 # model
-model = YOLO("yolo-Weights/yolov8n.pt")
+model = YOLO("yolo-Weights/yolov8n.pt", verbose=False)
 
 # object classes
 classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
@@ -27,30 +47,17 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
               "teddy bear", "hair drier", "toothbrush"
               ]
-COOLDOWN = 0.5 * 10  # seconds
+COOLDOWN = 3   # seconds
 last_increment_time = 0
 
 prev_object_present = False
 
-TARGET_CLASS_ID = "person"
+TARGET_CLASS_ID = "bottle"
+goal_frequency = 5
 
-# ---- FLASK SETUP ----
-app = Flask(__name__)
-CORS(app)
+counter = 0
 
-@app.route("/data", methods=["POST"])
-def receive_data():
-    global TARGET_CLASS_ID  # 👈 required
 
-    data = request.json
-    TARGET_CLASS_ID = data.get("target", TARGET_CLASS_ID)
-
-    print("New target class:", TARGET_CLASS_ID)
-
-    return jsonify({
-        "status": "received",
-        "target": TARGET_CLASS_ID
-    })
 
 detections = []
 while True:
@@ -77,8 +84,8 @@ while True:
 
             # class name
             cls = int(box.cls[0])
-            #print("Class name -->", classNames[cls])
-            if "person" ==  classNames[cls]:
+            print("Class name -->", classNames[cls])
+            if TARGET_CLASS_ID ==  classNames[cls]:
                 print("found")
 
             # object details
@@ -91,7 +98,7 @@ while True:
             cv2.putText(img, classNames[cls], org, font, fontScale, color, thickness)
             #print(time.time())
 
-            counter = 0
+            
 
 
             # ---- YOUR DETECTION CODE ----
@@ -101,26 +108,32 @@ while True:
             label = model.names[cls_id]
             conf = float(box.conf[0])
 
-            if confidence > 0.6 and classNames[cls] == TARGET_CLASS_ID:
-                detections.append(r)
+            object_present = False
 
-            object_present = len(detections) > 0
+            if confidence > 0.6 and classNames[cls] == TARGET_CLASS_ID:
+                object_present = True
 
 
             current_time = time.time()
 
             object_just_appeared = object_present and not prev_object_present
 
-            if object_just_appeared:
-                if current_time - last_increment_time >= COOLDOWN:
-                    counter += 1
-                    last_increment_time = current_time
-                    print("############################################")
-                    print("Counter:", counter)
-                    print("############################################")
+            current_time = time.time()
+
+            object_just_appeared = object_present and not prev_object_present
+
+            if object_just_appeared and current_time - last_increment_time >= COOLDOWN:
+                counter += 1
+                last_increment_time = current_time
+                print("Counter:", counter)
+
+            prev_object_present = object_present
 
             prev_object_present = object_present
             cv2.putText(img, str(counter), org, font, fontScale, color, thickness)
+
+            if counter == goal_frequency:
+                anims.frequency_reached_animation()
 
     cv2.imshow('Webcam', img)
     if cv2.waitKey(1) == ord('q'):
