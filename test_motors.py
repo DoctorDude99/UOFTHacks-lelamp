@@ -5,8 +5,8 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from service.motors import MotorsService
-from service.base import Priority
+from lelamp.service.motors import MotorsService
+from lelamp.service.base import Priority
 
 def test_motors_service():
     parser = argparse.ArgumentParser(description="Test Motors Service")

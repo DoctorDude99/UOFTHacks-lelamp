@@ -7,6 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from lelamp.service.rgb import RGBService
 from lelamp.service.base import Priority
 from lelamp.functions.animation_functions import AnimationFunctions
+from lelamp.functions.vision_functions import VisionFunctions
 
 def habit_completed():
     print("Task completed!")
@@ -14,21 +15,29 @@ def habit_completed():
     rgb_service = RGBService()
     rgb_service.start()
     animationFunction = AnimationFunctions()
+    visionFunctions = VisionFunctions()
     
     try:
         print("Testing solid green...")
         rgb_service.dispatch("solid", (0, 255, 0))
         time.sleep(2)
 
-        print("Starting dance animation...")
-        animationFunction.start_dancing()
-        time.sleep(5)
-        animationFunction.stop_dancing()
-        animationFunction.play_recording("happy-wiggle")
-        time.sleep(5)
-        animationFunction.stop_dancing()
-        animationFunction.play_recording("dancing1")
-        time.sleep(5)
+        # tried and failed
+        # print("Starting dance animation...")
+        # animationFunction.start_dancing()
+        # time.sleep(5)
+        # animationFunction.stop_dancing()
+        # animationFunction.play_recording("happy-wiggle")
+        # time.sleep(5)
+        # animationFunction.stop_dancing()
+        # animationFunction.play_recording("dancing1")
+        # time.sleep(5)
+
+        visionFunctions.describe_scene()
+        time.sleep(2)
+
+        visionFunctions.get_scene_details()
+        time.sleep(2)   
         
         # print("Testing paint pattern...")
         # colors = [
