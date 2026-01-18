@@ -2,6 +2,11 @@ from ultralytics import YOLO
 import cv2
 import math 
 import time
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import threading
+
 # start webcam
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
@@ -28,6 +33,24 @@ last_increment_time = 0
 prev_object_present = False
 
 TARGET_CLASS_ID = "person"
+
+# ---- FLASK SETUP ----
+app = Flask(__name__)
+CORS(app)
+
+@app.route("/data", methods=["POST"])
+def receive_data():
+    global TARGET_CLASS_ID  # 👈 required
+
+    data = request.json
+    TARGET_CLASS_ID = data.get("target", TARGET_CLASS_ID)
+
+    print("New target class:", TARGET_CLASS_ID)
+
+    return jsonify({
+        "status": "received",
+        "target": TARGET_CLASS_ID
+    })
 
 detections = []
 while True:
