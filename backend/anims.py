@@ -9,11 +9,8 @@ from service.motors import MotorsService
 from service.base import Priority
 
 def frequency_reached_animation():
-    parser = argparse.ArgumentParser(description="Test Motors Service")
-    parser.add_argument('--port', type=str, required=True, help='Serial port for the lamp')
-    args = parser.parse_args()
 
-    motors_service = MotorsService(port=args.port)
+    motors_service = MotorsService("/dev/ttyACM0")
     # port=args.port
     # "/dev/ttyACM0"
     motors_service.start()
