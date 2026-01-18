@@ -21,9 +21,11 @@ def test_motors_service():
     try:
         print("Getting available recordings...")
         recordings = motors_service.get_available_recordings()
-        print(f"Available recordings: ")
-        for i in range(len(recordings)):
-            print(i + " : " + f"{recording}")
+        print(f"Available recordings: {recordings}")
+        index = 0
+        for recording in recordings:
+            print(f"{index} : {recording}")
+            index += 1
         
         if recordings:
             a = input("Please enter a number to play a recording!")
