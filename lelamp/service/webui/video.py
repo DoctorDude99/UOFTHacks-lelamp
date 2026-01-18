@@ -99,3 +99,6 @@ async def video_feed(show_box: bool = True):
         generate_video_feed(show_box=show_box),
         media_type="multipart/x-mixed-replace; boundary=frame",
     )
+
+if __name__ == "__main__":
+    video_feed()
