@@ -5,8 +5,8 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from lelamp.service.motors import MotorsService
-from lelamp.service.base import Priority
+from service.motors import MotorsService
+from service.base import Priority
 
 def frequency_reached_animation():
     parser = argparse.ArgumentParser(description="Test Motors Service")
@@ -28,3 +28,5 @@ def frequency_reached_animation():
     finally:
         motors_service.stop()
         
+if __name__ == "__main__":
+    frequency_reached_animation()
