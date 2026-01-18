@@ -43,11 +43,11 @@ def habit_completed():
     #     # animationFunction.play_recording("dancing1")
     #     # time.sleep(5)
 
-    #     visionFunctions.describe_scene()
-    #     time.sleep(2)
+        visionFunctions.describe_scene()
+        time.sleep(2)
 
-    #     visionFunctions.get_scene_details()
-    #     time.sleep(2)   
+        visionFunctions.get_scene_details()
+        time.sleep(2)   
 
         
         

@@ -40,6 +40,3 @@ def frequency_reached_animation():
         
     finally:
         motors_service.stop()
-        
-if __name__ == "__main__":
-    frequency_reached_animation()
