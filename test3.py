@@ -21,6 +21,9 @@ def habit_completed():
         time.sleep(2)
 
         print("Starting dance animation...")
+        animationFunction.start_dancing()
+        time.sleep(5)
+        animationFunction.stop_dancing()
         animationFunction.play_recording("happy-wiggle")
         time.sleep(5)
         animationFunction.stop_dancing()
