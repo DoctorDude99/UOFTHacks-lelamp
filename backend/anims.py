@@ -18,7 +18,7 @@ def frequency_reached_animation():
     # "/dev/ttyACM0"
     motors_service.start()
     try:
-
+        recordings = motors_service.get_available_recordings()
         if recordings:
             print(f"Available recordings: {recordings}")
             index = 0
