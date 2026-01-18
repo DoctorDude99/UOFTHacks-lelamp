@@ -240,3 +240,7 @@ def auto_detect_hardware() -> dict:
         "camera_detected": camera_audio and camera_video,
         "updated_config": updated,
     }
+
+if __name__ == "__main__":
+    result = auto_detect_hardware()
+    print("Hardware detection result:", result)
