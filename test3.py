@@ -21,9 +21,11 @@ def habit_completed():
         time.sleep(2)
 
         print("Starting dance animation...")
-        animationFunction.play_recording("happy-wiggle.csv")
+        animationFunction.play_recording("happy-wiggle")
         time.sleep(5)
-        animationFunction.play_recording("dancing1.csv")
+        animationFunction.stop_dancing()
+        animationFunction.play_recording("dancing1")
+        time.sleep(5)
         
         # print("Testing paint pattern...")
         # colors = [
@@ -50,6 +52,6 @@ def habit_completed():
         rgb_service.stop()
         animationFunction.stop_dancing()
         print("Task completed test finished!")
-    
+
 if __name__ == "__main__":
     habit_completed()
