@@ -101,6 +101,4 @@ async def video_feed(show_box: bool = True):
     )
 
 if __name__ == "__main__":
-    generate_video_feed(True)
-    time.sleep(5)
-    video_feed(True)
+    video_feed()

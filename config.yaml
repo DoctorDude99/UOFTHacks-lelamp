@@ -213,15 +213,15 @@ face_tracking:
     min_detection_confidence: 0.7
     min_tracking_confidence: 0.7
 vision:
-  enabled: false
+  enabled: true
   camera_type: auto
-  camera_device: null
+  camera_device: 0
   resolution:
   - 640
   - 480
   fps: 30
-  publish_livekit_video: false
-  publish_livekit_image: false
+  publish_livekit_video: true
+  publish_livekit_image: true
   provider: gemini
   image_fps: 1.0
   max_frame_size: 512
