@@ -1,13 +1,126 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/lelamp.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LeLamp</title>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    
+    <div class="header">
+      <header>Welcome to <em>LEIA!</em></header>
+      <p>Log. Encourage. Improve. Accompany.</p>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="table">
+        <label for="habits">Habit Name:</label>
+        <div class="habit-input-wrapper">
+          <input type="text" id="habits" name="habits" placeholder="Drink Water..." required>
+          <button class="submit-btn" id="submitHabit">
+            <svg viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <label for="daily-frequency">Daily Target:</label>
+        <input type="number" id="daily-frequency" name="daily-frequency" placeholder="Enter number..." min="1">
+        <p class="target-description">How many times per day do you want to perform this habit?</p>
+
+        <label for="fileInput">Upload Image: (optional)</label>
+        <input type="file" id="fileInput" accept="image/*">
+        <p class="upload-description">Upload a clear image of the object that this habit is associated with</p>
+        <img id="imagePreview" src="#" alt="Detect Object (Upload Image)">
+      </div>
+
+      <div class="habits-list-box" id="habitsListBox">
+        <h2>Habits List</h2>
+        <table class="habits-table">
+          <thead>
+            <tr>
+              <th>Habits</th>
+              <th>Daily Streak</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="habits-table-body" id="habitsTableBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Wave swirl background animation -->
+    <div class="swirl-bg">
+      <svg class="wave-container" viewBox="0 0 2000 400" preserveAspectRatio="none">
+        <path class="wave-path" d="M 0 200 Q 100 150 200 200 T 400 200 T 600 200 T 800 200 T 1000 200 T 1200 200 T 1400 200 T 1600 200 T 1800 200 T 2000 200"/>
+      </svg>
+      <svg class="wave-container" viewBox="0 0 2000 400" preserveAspectRatio="none">
+        <path class="wave-path" d="M 0 250 Q 150 180 300 250 T 600 250 T 900 250 T 1200 250 T 1500 250 T 1800 250 T 2000 250"/>
+      </svg>
+      <svg class="wave-container" viewBox="0 0 2000 400" preserveAspectRatio="none">
+        <path class="wave-path" d="M 0 300 Q 120 240 240 300 T 480 300 T 720 300 T 960 300 T 1200 300 T 1440 300 T 1680 300 T 1920 300 T 2000 300"/>
+      </svg>
+      <svg class="wave-container" viewBox="0 0 2000 400" preserveAspectRatio="none">
+        <path class="wave-path" d="M 0 220 Q 180 160 360 220 T 720 220 T 1080 220 T 1440 220 T 1800 220 T 2000 220"/>
+      </svg>
+      <svg class="wave-container" viewBox="0 0 2000 400" preserveAspectRatio="none">
+        <path class="wave-path" d="M 0 280 Q 140 210 280 280 T 560 280 T 840 280 T 1120 280 T 1400 280 T 1680 280 T 1960 280 T 2000 280"/>
+      </svg>
+    </div>
+
+    <div class="lamp-glow"></div>
+    <div class="lamp-label">light/dark</div>
+
+    <svg class="lamp-decoration" viewBox="0 0 250 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- Base -->
+      <rect x="140" y="170" width="100" height="25" rx="5" fill="#FDB813"/>
+      <rect x="150" y="165" width="80" height="10" rx="3" fill="#FCCD1D"/>
+      
+      <!-- Lower arm joint -->
+      <ellipse cx="190" cy="165" rx="15" ry="10" fill="#FCCD1D"/>
+      <circle cx="190" cy="165" r="8" fill="#FDB813"/>
+      
+      <!-- Lower arm -->
+      <path d="M 190 165 L 180 140 L 170 115 L 185 110 L 195 135 L 205 160 Z" fill="#FCCD1D"/>
+      
+      <!-- Middle joint -->
+      <ellipse cx="177.5" cy="112.5" rx="12" ry="10" fill="#FCCD1D"/>
+      <circle cx="177.5" cy="112.5" r="7" fill="#FDB813"/>
+      
+      <!-- Upper arm (angled towards screen) -->
+      <path d="M 177.5 112.5 L 155 100 L 120 85 L 115 100 L 150 115 L 172.5 127.5 Z" fill="#FCCD1D"/>
+      
+      <!-- Head joint -->
+      <ellipse cx="117.5" cy="92.5" rx="12" ry="10" fill="#FCCD1D"/>
+      <circle cx="117.5" cy="92.5" r="7" fill="#FDB813"/>
+      
+      <!-- Lamp head/shade -->
+      <g transform="translate(117.5, 92.5) rotate(-45)">
+        <!-- Back of lamp head (cylinder) -->
+        <ellipse cx="-35" cy="0" rx="18" ry="24" fill="#F7931E"/>
+        
+        <!-- Main cylindrical body -->
+        <rect x="-53" y="-24" width="36" height="48" fill="#FCCD1D"/>
+        
+        <!-- Front rim/opening -->
+        <ellipse cx="-17" cy="0" rx="18" ry="24" fill="#FDB813"/>
+        
+        <!-- Inner dark opening -->
+        <ellipse cx="-17" cy="0" rx="14" ry="20" fill="#E87E04"/>
+        
+        <!-- Light glow from inside -->
+        <ellipse cx="-17" cy="0" rx="12" ry="16" fill="#FFF4CC" opacity="0.9"/>
+        <ellipse cx="-20" cy="-2" rx="8" ry="10" fill="#FFFEF0" opacity="0.7"/>
+      </g>
+      
+      <!-- Joint details -->
+      <circle cx="190" cy="165" r="5" fill="#F7931E"/>
+      <circle cx="177.5" cy="112.5" r="4" fill="#F7931E"/>
+      <circle cx="117.5" cy="92.5" r="4" fill="#F7931E"/>
+    </svg>
+    <script src="script.js"></script>
   </body>
 </html>
