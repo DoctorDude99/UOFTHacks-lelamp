@@ -50,6 +50,6 @@ def habit_completed():
         rgb_service.stop()
         animationFunction.stop_dancing()
         print("Task completed test finished!")
-
+    
 if __name__ == "__main__":
-    task_completed()
+    habit_completed()
